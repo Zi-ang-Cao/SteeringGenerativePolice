@@ -20,38 +20,51 @@ Diffusion steering via reinforcement learning (DSRL) is a lightweight and effici
 ## Installation
 1. Clone repository
 ```
-git clone --recurse-submodules git@github.com:ajwagen/dsrl.git
+git clone --recurse-submodules git@github.com:Zi-ang-Cao/dsrl.git
 cd dsrl
 ```
 2. Create conda environment
 ```
-conda create -n dsrl python=3.9 -y
-conda activate dsrl
+conda create -n dsrl_dev python=3.10 -y
+conda activate dsrl_dev
 ```
 3. Install our fork of DPPO 
-```
+```Shell
 cd dppo
-pip install -e .
-pip install -e .[robomimic]
-pip install -e .[gym]
+pip install -e ".[all]"
 cd ..
 ```
 4. Install our fork of Stable Baselines3
-```
+```Shell
 cd stable-baselines3
 pip install -e .
-cd ..
+cd ../
 ```
+5. To support 5090
+```Shell
+pip3 install torch==2.8.0 torchvision==0.23.0 \
+--index-url https://download.pytorch.org/whl/cu128
+```
+6. Check your `.zshrc` or `.bashrc`
+```Shell
+export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
+export LD_LIBRARY_PATH="$HOME/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}"
+# For headless / NVIDIA, use EGL:
+export MUJOCO_GL=egl
+```
+
 The diffusion policy checkpoints for the Robomimic and Gym experiments can be found [here](https://drive.google.com/drive/folders/1kzC49RRFOE7aTnJh_7OvJ1K5XaDmtuh1?usp=share_link). Download the contents of this folder and place in `./dppo/log`.
 
 ## Running DSRL
 To run DSRL on Robomimic, call
+```Shell
+export CUDA_VISIBLE_DEVICES=0; 
+HYDRA_FULL_ERROR=1 python train_dsrl.py --config-path=cfg/robomimic --config-name=dsrl_square.yaml
 ```
-python train_dsrl.py --config-path=cfg/robomimic --config-name=dsrl_can.yaml
-```
-where `dsrl_can.yaml` is set to the config file for the desired task. Similarly, for Gym, call
-```
-python train_dsrl.py --config-path=cfg/gym --config-name=dsrl_hopper.yaml
+where `dsrl_square.yaml` is set to the config file for the desired task. Similarly, for Gym, call
+```Shell
+export CUDA_VISIBLE_DEVICES=1; 
+HYDRA_FULL_ERROR=1 python train_dsrl.py --config-path=cfg/gym --config-name=dsrl_hopper.yaml
 ```
 where `dsrl_hopper.yaml` is set to the config file for the desired task.
 
