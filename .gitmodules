@@ -1,6 +1,8 @@
 [submodule "stable-baselines3"]
 	path = stable-baselines3
 	url = git@github.com:Zi-ang-Cao/stable-baselines3-dsrl.git
+	branch = dsrl
 [submodule "dppo"]
 	path = dppo
 	url = git@github.com:Zi-ang-Cao/dppo-dsrl.git
+	branch = dsrl
