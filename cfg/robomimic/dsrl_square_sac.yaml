@@ -4,14 +4,14 @@ hydra:
   run:  
     dir: ${logdir}
 
-name: robomimic_square_dsrl_na_${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
+name: robomimic_square_dsrl_sac_${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
 logdir: ${log_dir}/robomimic-dsrl/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
 base_policy_path: ./dppo/log/robomimic-pretrain/square/square_pre_diffusion_mlp_ta4_td100_ddim-100steps/2025-04-11_19-13-26_44/checkpoint/state_3000.pt
 offline_data_path: ./dppo/log/robomimic/square_traj_data/train_offline.npz
 normalization_path: ./dppo/log/robomimic/${env_name}/normalization.npz
 dppo_path: ./dppo
 
-algorithm: dsrl_na
+algorithm: dsrl_sac
 
 seed: 1
 device: cuda:0
@@ -26,15 +26,13 @@ load_offline_data: False
 deterministic_eval: False
 
 eval_interval: 4000
-# num_evals: 200
-num_evals: 4
-
+num_evals: 200
 save_model_interval: 1000000
 save_replay_buffer: False
 
 env:
   n_envs:  4
-  n_eval_envs: 2
+  n_eval_envs: 25
   name: ${env_name}
   max_episode_steps: 400
   reset_at_iteration: False
